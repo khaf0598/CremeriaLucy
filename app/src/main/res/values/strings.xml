@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Cremeria Lucy</string>
+    <string-array name="CategoriasItems">
+        <item>Categoria 1</item>
+        <item>Categoria 2</item>
+        <item>Categoria 3</item>
+        <item>Categoria 4</item>
+    </string-array>
+    <string-array name="ProveedoresItems">
+        <item>Proveedor 1</item>
+        <item>Proveedor 2</item>
+        <item>Proveedor 3</item>
+        <item>Proveedor 4</item>
+    </string-array>
+    <string-array name="ProductosItems">
+        <item>Producto 1</item>
+        <item>Producto 2</item>
+        <item>Producto 3</item>
+        <item>Producto 4</item>
+    </string-array>
+</resources>

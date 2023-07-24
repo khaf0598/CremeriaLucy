@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Entrada">#97f7a6</color>
+    <color name="Salida">#f797a6</color>
+    <color name="Principal">#3e79ef</color>
+    <color name="Boton_Aceptar">#0fc76d</color>
+    <color name="Boton_Cancelar">#f3627d</color>
+    <color name="Botones_Configuracion">#777777</color>
+    <color name="Botones_Configuracion_Sel">#555555</color>
+    <color name="Secundario">#f2f2f2</color>
+    <color name="Listas">#2a92f2</color>
+    <color name="Terceario">#FF0000</color>
+    <color name="transparent">#000000</color>
+</resources>
