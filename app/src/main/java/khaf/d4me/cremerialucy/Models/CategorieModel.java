@@ -1,29 +1,38 @@
 package khaf.d4me.cremerialucy.Models;
 
 public class CategorieModel {
-    private String category;
-    private int IdCategoria, IdProveedor;
-    public String getTitle() {
+    private String category, descripcion;
+    private int IdCategoria;
+    private int IdSeleccionBD;
+    public String getCategoria() {
         return category;
+    }
+    public String getDescripcion() {
+        return descripcion;
     }
     public int getIdCategoria() {
         return IdCategoria;
     }
-    public int getIdProveedor() {
-        return IdProveedor;
+    public int getIdSeleccionBD() {
+        return IdSeleccionBD;
     }
-    public void setTitle(String cat) {
+    public void setCategoria(String cat) {
         this.category = cat;
+    }
+    public void setDescripcion(String desc) {
+        this.descripcion = desc;
     }
     public void setIdCategoria(int idCategoria) {
         this.IdCategoria = idCategoria;
     }
-    public void setIdProveedor(int idProveedor) {
-        this.IdProveedor = idProveedor;
+    public void setIdSeleccionBD(int idSelBd) {
+        this.IdSeleccionBD = idSelBd;
     }
 
-    public CategorieModel(String cat, int IdCat) {
+    public CategorieModel(String cat,String desc, int IdCat, int IdSel) {
         this.category = cat;
+        this.descripcion = desc;
         this.IdCategoria = IdCat;
+        this.IdSeleccionBD = IdSel;
     }
 }

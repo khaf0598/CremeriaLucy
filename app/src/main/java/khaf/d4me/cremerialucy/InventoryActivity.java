@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,14 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import khaf.d4me.cremerialucy.Adapters.RecyclerViewAdapter_Inventory;
+import khaf.d4me.cremerialucy.Adapters.SpinnerViewAdapter_Categories;
 import khaf.d4me.cremerialucy.Interfaces.ItemClickListener;
+import khaf.d4me.cremerialucy.Models.CategorieModel;
 import khaf.d4me.cremerialucy.Models.InventoryModel;
+import khaf.d4me.cremerialucy.Models.InventoryProveedorModel;
 
 public class InventoryActivity extends AppCompatActivity {
-    ArrayList<InventoryModel> listaProductos;
-    InventoryModel ModelProductos;
+    ArrayList<InventoryProveedorModel> listaProductosProveedor;
+    ArrayList<InventoryProveedorModel> listaProductos;
+    InventoryProveedorModel ModelProductos;
     private RecyclerView recyclerProductos;
     private RecyclerViewAdapter_Inventory adapter_inventory;
     ItemClickListener itemClickListener;
@@ -33,6 +41,8 @@ public class InventoryActivity extends AppCompatActivity {
     TextView lblTitulo, lblProductoElegido;
     String Producto, Categoria, Proveedor;
     Integer IdProducto = -1;
+    DatosLocales dbLocal;
+    EditText txtBuscarProducto;
 
     int idProveedor, idCategoria;
     @Override
@@ -40,6 +50,11 @@ public class InventoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
         recyclerProductos = findViewById(R.id.rvProductos);
+        dbLocal = new DatosLocales(this);
+
+        listaProductosProveedor = new ArrayList<InventoryProveedorModel>();
+        listaProductos = new ArrayList<InventoryProveedorModel>();
+
 
         ibtnAgregarProducto = (ImageButton) findViewById(R.id.ibtnAgregarProducto);
         ibtnAtrasInventario = (ImageButton) findViewById(R.id.ibtnAtrasInventario);
@@ -47,6 +62,7 @@ public class InventoryActivity extends AppCompatActivity {
         btnEntrada = (Button) findViewById(R.id.btnEntrada);
         lblTitulo = (TextView) findViewById(R.id.lblProductoSeleccionado);
         lblProductoElegido = (TextView) findViewById(R.id.lblProductoElegido);
+        txtBuscarProducto = (EditText) findViewById(R.id.txtBuscarProducto);
 
         String tituloProducto = getIntent().getExtras().getString("Proveedor")+" - "+getIntent().getExtras().getString("Categoria");
         idProveedor = getIntent().getExtras().getInt("IdProveedor");
@@ -65,13 +81,25 @@ public class InventoryActivity extends AppCompatActivity {
         dividerItemDecoration.setDrawable(getDrawable(R.drawable.divider));
         recyclerProductos.addItemDecoration(dividerItemDecoration);
 
-        listaProductos = new ArrayList<InventoryModel>();
-        for(int i = 0; i < 20; i++){
-            ModelProductos = new InventoryModel("Producto "+(i+1),i, 10);
+        listaProductosProveedor = dbLocal.ListarProductosProveedores(idProveedor,idCategoria);
+        for(int i = 0; i < listaProductosProveedor.size(); i++){
+            ModelProductos = new InventoryProveedorModel(listaProductosProveedor.get(i).getIdProducto(),
+                    listaProductosProveedor.get(i).getIdProveedor(),
+                    listaProductosProveedor.get(i).getIdCategoria(),
+                    listaProductosProveedor.get(i).getPrecioCompra(),
+                    listaProductosProveedor.get(i).getPrecioCompraA(),
+                    listaProductosProveedor.get(i).getPrecioVenta(),
+                    listaProductosProveedor.get(i).getDescripcion(),
+                    listaProductosProveedor.get(i).getUltimoIngreso(),
+                    listaProductosProveedor.get(i).getPiezas(),
+                    listaProductosProveedor.get(i).getIdProductoProveedor(),
+                    listaProductosProveedor.get(i).getProducto(),
+                    listaProductosProveedor.get(i).getCodigo(),i);
             listaProductos.add(ModelProductos);
         }
 
-        adapter_inventory = new RecyclerViewAdapter_Inventory(listaProductos, new RecyclerViewAdapter_Inventory.RecyclerViewItemCheckListener() {
+        adapter_inventory = new RecyclerViewAdapter_Inventory(listaProductos,
+                new RecyclerViewAdapter_Inventory.RecyclerViewItemCheckListener() {
             @Override
             public void changeOnItem(Integer pos) {
                 adapter_inventory.notifyDataSetChanged();
@@ -86,7 +114,7 @@ public class InventoryActivity extends AppCompatActivity {
             public void onItemClick(int position, View v) {
                 showAlertDialogButtonClicked(v, 1, listaProductos.get(position));
             }
-        });
+        }, this);
 
         recyclerProductos.setAdapter(adapter_inventory);
 
@@ -101,7 +129,10 @@ public class InventoryActivity extends AppCompatActivity {
         ibtnAgregarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialogButtonClicked(v, 0, null);
+                InventoryProveedorModel ProductoNuevo = new InventoryProveedorModel(0,idProveedor,idCategoria,0,
+                        0,0,"","",0,0,"","",0);
+
+                showAlertDialogButtonClicked(v, 0, ProductoNuevo);
                 //Toast.makeText(getApplicationContext(),"Categoria: "+idCategoria+"-Proveedor: "+idProveedor+"-Producto: "+IdProducto,Toast.LENGTH_LONG).show();
             }
         });
@@ -124,9 +155,24 @@ public class InventoryActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Seleccione un producto", Toast.LENGTH_SHORT).show();
             }
         });
+
+        txtBuscarProducto.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter_inventory.getFilter().filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
-    public void showAlertDialogButtonClicked(View view, Integer tipo, InventoryModel producto)
+    public void showAlertDialogButtonClicked(View view, Integer tipo, InventoryProveedorModel producto)
     {
         // Create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -137,14 +183,29 @@ public class InventoryActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
         Spinner spnCat = (Spinner) customLayout.findViewById(R.id.spnCategorias);
+        TextView lblTipoMov = (TextView) customLayout.findViewById(R.id.lblTipoMovimiento);
         EditText txtNombreProd = (EditText) customLayout.findViewById(R.id.txtNombreAProducto);
         EditText txtPiezasProd = (EditText) customLayout.findViewById(R.id.txtPiezasAProducto);
         Button btnCancelarP = (Button) customLayout.findViewById(R.id.btnCancelarAProducto);
         Button btnAceptarP = (Button) customLayout.findViewById(R.id.btnAceptarAProducto);
+        SpinnerViewAdapter_Categories adapterSpinnerCat;
+
+
+        ArrayList<CategorieModel> listarCategoriaSpinner = dbLocal.ListarCategoriasSpinner(producto.getIdProveedor(), producto.getIdCategoria());
+        adapterSpinnerCat = new SpinnerViewAdapter_Categories(this, listarCategoriaSpinner, producto.getIdCategoria());
+        spnCat.setAdapter(adapterSpinnerCat);
 
         if(tipo == 1){
+            lblTipoMov.setText("EDITAR PRODUCTO");
             txtNombreProd.setText(producto.getProducto());
             txtPiezasProd.setText(String.valueOf(producto.getPiezas()));
+
+            for(int i = 0; i < listarCategoriaSpinner.size(); i++){
+                if(listarCategoriaSpinner.get(i).getIdSeleccionBD()==1){
+                    spnCat.setSelection(i);
+                    break;
+                }
+            }
         }
 
         btnCancelarP.setOnClickListener(new View.OnClickListener() {

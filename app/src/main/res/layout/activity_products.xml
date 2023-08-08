@@ -18,16 +18,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/Principal"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/Principal"
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/ibtnAtrasInventario"
+                    android:id="@+id/ibtnAtrasPrincipal"
                     style="@android:style/Widget.DeviceDefault.Light.ImageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -39,23 +39,24 @@
                     android:minHeight="48dp"
                     android:scaleType="centerCrop"
                     app:srcCompat="?attr/actionModeCloseDrawable"
-                    app:tint="#FFFFFF" />
+                    app:tint="#FFFFFF"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
-                    android:id="@+id/lblProductoSeleccionado"
+                    android:id="@+id/lblProductosGeneral"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="PROVEEDOR - CATEGORIA"
+                    android:text="PRODUCTOS"
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/ibtnAgregarProducto"
+                    android:id="@+id/ibtnAgregarProductoGeneral"
                     style="@android:style/Widget.Material.Light.ImageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -71,31 +72,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:background="@color/Principal">
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/textView27"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text="Filtros: "
                     android:textColor="#fff"
-                    android:gravity="center"
                     android:textSize="20dp"
-                    android:paddingLeft="10dip"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/txtBuscarProducto"
+                    android:id="@+id/txtBuscarProductoCat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Busqueda por producto, codigo, piezas"
+                    android:hint="Busqueda por nombre, codigo"
                     android:inputType="textPersonName"
                     android:paddingLeft="10dip"
                     android:textColor="#fff"
                     android:textColorHint="#fff"
-                    android:paddingRight="10dip"
                     tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
@@ -108,78 +107,10 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProductos"
+                android:id="@+id/rvProductosGeneral"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/Principal"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Producto Seleccionado:"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/lblProductoElegido"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sin selección"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llInfoAlmacen"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="2dp">
-
-                <Button
-                    android:id="@+id/btnSalida"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/Boton_Cancelar"
-                    android:text="SALIDA"
-                    android:textColor="#3E2723"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btnEntrada"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/Boton_Aceptar"
-                    android:backgroundTintMode="add"
-                    android:text="ENTRADA"
-                    android:textColor="#424242"
-                    android:textSize="24sp" />
-            </LinearLayout>
-
-        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

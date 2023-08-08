@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import khaf.d4me.cremerialucy.Adapters.RecyclerViewAdapter_Categories;
 import khaf.d4me.cremerialucy.Adapters.RecyclerViewAdapter_Store;
 import khaf.d4me.cremerialucy.Models.CategorieModel;
+import khaf.d4me.cremerialucy.Models.CategorieProveedorModel;
 import khaf.d4me.cremerialucy.Models.StoreModel;
 
 public class StoreActivity extends AppCompatActivity implements RecyclerViewAdapter_Categories.RecyclerViewItemClickListener{
@@ -30,7 +34,9 @@ public class StoreActivity extends AppCompatActivity implements RecyclerViewAdap
     Button btnProveedor;
     StoreModel storeModelProveedor;
     CategorieModel storeModelCategory;
+    ArrayList<StoreModel> listaProveedoresLocal;
     ArrayList<StoreModel> listaProveedores;
+
     ArrayList<CategorieModel> listaCategorias;
     TextView lblProveedorElegido;
     private RecyclerView recyclerProveedores;
@@ -38,12 +44,17 @@ public class StoreActivity extends AppCompatActivity implements RecyclerViewAdap
     private RecyclerView recyclerCategorias;
     private RecyclerViewAdapter_Categories adapter_categories;
     DialogCategories customDialog;
-
+    DatosLocales dbLocal;
+    EditText txtBuscarProveedor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
         recyclerProveedores = findViewById(R.id.rvProveedores);
+        txtBuscarProveedor = findViewById(R.id.txtBuscarProveedor);
+        dbLocal = new DatosLocales(this);
+        listaProveedores = new ArrayList<StoreModel>();
+        listaProveedoresLocal = new ArrayList<StoreModel>();
         // Esta línea mejora el rendimiento, si sabemos que el contenido
         // no va a afectar al tamaño del RecyclerView
 
@@ -58,16 +69,18 @@ public class StoreActivity extends AppCompatActivity implements RecyclerViewAdap
         dividerItemDecoration.setDrawable(getDrawable(R.drawable.divider));
         recyclerProveedores.addItemDecoration(dividerItemDecoration);
 
-        listaProveedores = new ArrayList<StoreModel>();
-        for(int i = 0; i < 20; i++){
-            storeModelProveedor = new StoreModel("Proveedor "+(i+1),i);
+        listaProveedoresLocal = dbLocal.ListarProveedores();
+        for(int i = 0; i < listaProveedoresLocal.size(); i++){
+            storeModelProveedor = new StoreModel(listaProveedoresLocal.get(i).getProveedor(),listaProveedoresLocal.get(i).getDescripcion(),
+                    listaProveedoresLocal.get(i).getIdProveedor());
             listaProveedores.add(storeModelProveedor);
         }
 
         adapter_store = new RecyclerViewAdapter_Store(listaProveedores,this, new RecyclerViewAdapter_Store.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                clickHere(v, listaProveedores.get(position).getTitle(),listaProveedores.get(position).getIdProveedor());
+                System.out.println(listaProveedores.get(position).getIdProveedor());
+                clickHere(v, listaProveedores.get(position).getProveedor(), listaProveedores.get(position).getIdProveedor());
             }
         });
         recyclerProveedores.setAdapter(adapter_store);
@@ -85,6 +98,19 @@ public class StoreActivity extends AppCompatActivity implements RecyclerViewAdap
             @Override
             public void onClick(View v) {
                 showAlertDialogProveedor(v);
+            }
+        });
+
+        txtBuscarProveedor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter_store.getFilter().filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }
@@ -120,9 +146,13 @@ public class StoreActivity extends AppCompatActivity implements RecyclerViewAdap
         dialog.show();
     }
     public void clickHere(View view, String titulo, Integer idProv) {
-        ArrayList<CategorieModel> listaCategorias = new ArrayList<CategorieModel>();
-        for(int i = 0; i < 10; i++){
-            CategorieModel storeModelCategory = new CategorieModel("Categoria "+(i+1), i);
+        ArrayList<CategorieProveedorModel> listaCategoriasLocal = dbLocal.ListarCategoriasProveedores(idProv);
+        ArrayList<CategorieProveedorModel> listaCategorias = new ArrayList<CategorieProveedorModel>();
+        for(int i = 0; i < listaCategoriasLocal.size(); i++){
+            CategorieProveedorModel storeModelCategory = new CategorieProveedorModel(listaCategoriasLocal.get(i).getIdCategoriaInternet(),
+                    listaCategoriasLocal.get(i).getCategoria(),
+                    listaCategoriasLocal.get(i).getIdCategoria(),
+                    listaCategoriasLocal.get(i).getIdProveedor());
             listaCategorias.add(storeModelCategory);
         }
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerProveedores.getContext(),DividerItemDecoration.VERTICAL);

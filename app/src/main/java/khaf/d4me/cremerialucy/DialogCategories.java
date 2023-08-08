@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import khaf.d4me.cremerialucy.Adapters.RecyclerViewAdapter_Categories;
 
 public class DialogCategories extends Dialog implements View.OnClickListener {
 
@@ -30,10 +35,12 @@ public class DialogCategories extends Dialog implements View.OnClickListener {
     TextView title;
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    RecyclerView.Adapter adapter;
+    RecyclerViewAdapter_Categories adapter;
     String tit;
     DividerItemDecoration divFilas;
-    public DialogCategories(Activity a, RecyclerView.Adapter adapter, String titulo, DividerItemDecoration divisor) {
+    EditText txtBuscarCategoria;
+    public DialogCategories(Activity a, RecyclerViewAdapter_Categories adapter, String titulo,
+                            DividerItemDecoration divisor) {
         super(a);
         this.activity = a;
         this.adapter = adapter;
@@ -51,6 +58,8 @@ public class DialogCategories extends Dialog implements View.OnClickListener {
         setContentView(R.layout.dialog_choose_supplier);
         title = findViewById(R.id.lblCategoriaProveedor);
         recyclerView = findViewById(R.id.rvProveedoresCategorias);
+        txtBuscarCategoria = findViewById(R.id.txtBuscarCategoria);
+
         mLayoutManager = new LinearLayoutManager(activity);
 
         recyclerView.setLayoutManager(mLayoutManager);
@@ -58,6 +67,19 @@ public class DialogCategories extends Dialog implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(divFilas);
         title.setText(tit);
+
+        txtBuscarCategoria.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
 

@@ -1,50 +1,40 @@
 package khaf.d4me.cremerialucy.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import khaf.d4me.cremerialucy.Models.CategorieModel;
-import khaf.d4me.cremerialucy.Models.CategorieProveedorModel;
 import khaf.d4me.cremerialucy.Models.StoreModel;
 import khaf.d4me.cremerialucy.R;
 
-public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<RecyclerViewAdapter_Categories.ViewHolder>  implements Filterable {
-    private ArrayList<CategorieProveedorModel> courseDataArrayList;
+public class RecyclerViewAdapter_Proveedores_General extends RecyclerView.Adapter<RecyclerViewAdapter_Proveedores_General.ViewHolder> implements Filterable {
+    private ArrayList<StoreModel> courseDataArrayList;
     RecyclerViewItemClickListener recyclerViewItemClickListener;
 
-    private ArrayList<CategorieProveedorModel> courseDataArrayListFilter;
-    private RecyclerViewAdapter_Categories.CustomFilter mFilter;
+    private ArrayList<StoreModel> courseDataArrayListFilter;
+    private RecyclerViewAdapter_Proveedores_General.CustomFilter mFilter;
 
-    String Proveedor;
-    Integer IdProveedor;
-    public RecyclerViewAdapter_Categories(ArrayList<CategorieProveedorModel> recyclerDataArrayList, Integer idProv, RecyclerViewItemClickListener listener, String Prov) {
+    public RecyclerViewAdapter_Proveedores_General(ArrayList<StoreModel> recyclerDataArrayList, RecyclerViewItemClickListener listener) {
         this.courseDataArrayList = recyclerDataArrayList;
-        this.recyclerViewItemClickListener = listener;
-        this.courseDataArrayListFilter = new ArrayList<CategorieProveedorModel>();
+        this.courseDataArrayListFilter = new ArrayList<StoreModel>();
         this.courseDataArrayListFilter.addAll(recyclerDataArrayList);
-        this.mFilter = new RecyclerViewAdapter_Categories.CustomFilter(RecyclerViewAdapter_Categories.this);
-        this.Proveedor = Prov;
-        this.IdProveedor = idProv;
+        this.mFilter = new RecyclerViewAdapter_Proveedores_General.CustomFilter(RecyclerViewAdapter_Proveedores_General.this);
+        this.recyclerViewItemClickListener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_supplier_category, parent, false);
-
         ViewHolder vh = new ViewHolder(v);
         return vh;
 
@@ -52,8 +42,8 @@ public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<Recycle
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder fruitViewHolder, int i) {
-        CategorieProveedorModel recyclerData = courseDataArrayListFilter.get(i);
-        fruitViewHolder.mTextView.setText(recyclerData.getCategoria());
+        StoreModel recyclerData = courseDataArrayListFilter.get(i);
+        fruitViewHolder.mTextView.setText(recyclerData.getProveedor());
     }
 
     @Override
@@ -65,6 +55,7 @@ public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<Recycle
     public Filter getFilter() {
         return mFilter;
     }
+
 
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -78,27 +69,29 @@ public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<Recycle
 
         @Override
         public void onClick(View v) {
-            int position =  courseDataArrayList.indexOf(courseDataArrayListFilter.get(getAbsoluteAdapterPosition()));
-            recyclerViewItemClickListener.clickOnItem(courseDataArrayList.get(position).getCategoria(), position, courseDataArrayList.get(position).getIdCategoria(), Proveedor, IdProveedor);
+            int position = courseDataArrayList.indexOf(courseDataArrayListFilter.get(getAbsoluteAdapterPosition()));
+            if (position >= 0) {
+                recyclerViewItemClickListener.clickOnItem(courseDataArrayList.get(position).getProveedor(), position);
+            }
         }
     }
 
     public interface RecyclerViewItemClickListener {
-        void clickOnItem(String title, int posi, int idCat, String Prov, int idProv);
+        void clickOnItem(String title, int posi);
     }
 
     //Para filtros
     public class CustomFilter extends Filter {
-        private RecyclerViewAdapter_Categories listAdapterCategoriasProv;
+        private RecyclerViewAdapter_Proveedores_General listAdapterProveedoresGen;
 
-        private CustomFilter(RecyclerViewAdapter_Categories listAdapter) {
+        private CustomFilter(RecyclerViewAdapter_Proveedores_General listAdapter) {
             super();
-            this.listAdapterCategoriasProv = listAdapter;
+            this.listAdapterProveedoresGen = listAdapter;
         }
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            courseDataArrayListFilter = new ArrayList<CategorieProveedorModel>();
+            courseDataArrayListFilter = new ArrayList<StoreModel>();
             courseDataArrayListFilter.clear();
             final FilterResults results = new FilterResults();
             if (constraint.length() == 0) {
@@ -106,9 +99,9 @@ public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<Recycle
             } else {
                 final String filterPattern = constraint.toString().toLowerCase().trim();
                 for(int i = 0; i < courseDataArrayList.size(); i++){
-                    CategorieProveedorModel categoria = courseDataArrayList.get(i);
-                    if (categoria.getCategoria().toLowerCase().startsWith(filterPattern)) {
-                        courseDataArrayListFilter.add(categoria);
+                    StoreModel proveedor = courseDataArrayList.get(i);
+                    if (proveedor.getProveedor().toLowerCase().startsWith(filterPattern)) {
+                        courseDataArrayListFilter.add(proveedor);
                     }
                 }
             }
@@ -119,7 +112,7 @@ public class RecyclerViewAdapter_Categories extends RecyclerView.Adapter<Recycle
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            listAdapterCategoriasProv.notifyDataSetChanged();
+            listAdapterProveedoresGen.notifyDataSetChanged();
         }
     }
 }

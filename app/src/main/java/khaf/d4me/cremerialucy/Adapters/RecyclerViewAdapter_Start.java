@@ -3,6 +3,7 @@ package khaf.d4me.cremerialucy.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,11 +48,13 @@ public class RecyclerViewAdapter_Start extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         // Set the data to textview and imageview.
-        int pos = position;
+        int drawableResourceId = mcontext.getResources().getIdentifier(courseDataArrayList.get(position).getImagen(),
+                "drawable", mcontext.getPackageName());
+
         StartModel recyclerData = courseDataArrayList.get(position);
         holder.courseTV.setText(recyclerData.getTitle());
         holder.courseTV.setTextSize(courseDataArrayList.get(position).getTamanoTexto());
-        holder.courseIV.setImageResource(recyclerData.getImgid());
+        holder.courseIV.setImageResource(drawableResourceId);
         holder.courseIV.getLayoutParams().height = courseDataArrayList.get(position).getTamano();
     }
 

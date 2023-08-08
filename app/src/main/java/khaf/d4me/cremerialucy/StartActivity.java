@@ -5,8 +5,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,37 +23,43 @@ public class StartActivity extends AppCompatActivity {
     int spanCount = 2;
     private RecyclerView recyclerView_start;
     private ArrayList<StartModel> recyclerDataArrayList;
+    SharedPreferences Configuraciones;
+    SharedPreferences.Editor EditarConfiguracion;
+    DatosLocales dbLocal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
+        Configuraciones = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        EditarConfiguracion = Configuraciones.edit();
+        dbLocal = new DatosLocales(this);
+        recyclerDataArrayList = new ArrayList<StartModel>();
         recyclerView_start = findViewById(R.id.rvMenus);
 
         // created new array list..
-        recyclerDataArrayList = new ArrayList<>();
-
         // added data to array list
-        recyclerDataArrayList.add(new StartModel("ALMACÉN",R.drawable.uno, 600, 45));
-        recyclerDataArrayList.add(new StartModel("CATEGORIAS",R.drawable.dos, 200, 20));
-        recyclerDataArrayList.add(new StartModel("CONFIGURACIÓN",R.drawable.tres, 200,20));
-        recyclerDataArrayList.add(new StartModel("CERRAR SESIÓN",R.drawable.cuatro, 200,20));
+        recyclerDataArrayList = dbLocal.ListarInicioTabla();
+
+        //recyclerDataArrayList.add(new StartModel("ALMACÉN",0, 600, 45,"StoreActivity",0,"uno"));
+        //recyclerDataArrayList.add(new StartModel("CATEGORIAS",0, 200, 20,"CategoriesActivity",0,"seis"));
+        //recyclerDataArrayList.add(new StartModel("PROVEEDORES",0, 200, 20,"ProveedorActivity",0,"dos"));
+        //recyclerDataArrayList.add(new StartModel("PRODUCTOS",0, 200, 20,"ProductsActivity",0,"cinco"));
+        //recyclerDataArrayList.add(new StartModel("ACTUALIZACIÓN",0, 200,20,"UpdatesActivity",0,"siete"));
+        //recyclerDataArrayList.add(new StartModel("CONFIGURACIÓN",0, 200,20,"SettingsActivity",0,"tres"));
+        //recyclerDataArrayList.add(new StartModel("CERRAR SESIÓN",0, 200,20,"AccionLocal",1,"cuatro"));
 
         // added data from arraylist to adapter class.
         RecyclerViewAdapter_Start adapter = new RecyclerViewAdapter_Start(recyclerDataArrayList, this, new RecyclerViewAdapter_Start.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                int pos = position;
-                if(pos == 0){
-                    Intent intent = new Intent(StartActivity.this, StoreActivity.class);
-                    startActivity(intent);
-                }
-                else if(pos == 1){
-                    showAlertDialogButtonClicked(v);
-                }else if(pos == 2){
-                    Intent intent = new Intent(StartActivity.this, SettingsActivity.class);
-                    startActivity(intent);
-                }
+                try {
+                    if(recyclerDataArrayList.get(position).getTipoAccion()==0) {
+                        Intent intent = new Intent(StartActivity.this, Class.forName("khaf.d4me.cremerialucy."+recyclerDataArrayList.get(position).getPagina()));
+                        startActivity(intent);
+                    }else
+                        showAlertDialogCerrarSesion(v);
+                }catch (Exception ex){}
             }
         });
 
@@ -76,14 +85,8 @@ public class StartActivity extends AppCompatActivity {
         recyclerView_start.setAdapter(adapter);
     }
 
-    private RecyclerViewAdapter_Start.ClickListener mItemClick = new RecyclerViewAdapter_Start.ClickListener() {
-        @Override
-        public void onItemClick(int position, View v) {
-            showAlertDialogButtonClicked(v);
-        }
-    };
 
-    public void showAlertDialogButtonClicked(View view)
+    public void showAlertDialogProductos(View view)
     {
         // Create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -112,5 +115,53 @@ public class StartActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+    public void showAlertDialogCerrarSesion(View view)
+    {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_close_session, null);
+        builder.setView(customLayout);
+        AlertDialog dialog = builder.create();
+
+        Button btnCancelarC = (Button) customLayout.findViewById(R.id.btnCancelarCerrarSesion);
+        Button btnAceptarC = (Button) customLayout.findViewById(R.id.btnAceptarCerrarSesion);
+
+        btnCancelarC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnAceptarC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditarConfiguracion.clear();
+                EditarConfiguracion.commit();
+                if(Configuraciones.getInt("IdUsuario",-1)<=-1)
+                {
+                    dbLocal.ResetProveedores();
+                    dbLocal.ResetCategorias();
+                    dbLocal.ResetCategoriasProveedores();
+                    dbLocal.ResetProductos();
+                    dbLocal.ResetProductosProveedores();
+                    dbLocal.ResetInicioTabla();
+                    dbLocal.ResetMovimientos();
+                    finish();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
     }
 }

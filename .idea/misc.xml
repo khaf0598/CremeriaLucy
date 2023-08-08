@@ -8,16 +8,22 @@
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/drawable/divider.xml" value="0.1" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/drawable/ic_radio_button_checked_black_24dp.xml" value="0.2035" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/drawable/radiodraw.xml" value="0.2045" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_categories.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_inventory.xml" value="0.25" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_main.xml" value="0.21" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_products.xml" value="0.18" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_proveedor.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_settings.xml" value="0.25" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_splash.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_start.xml" value="0.25" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_store.xml" value="0.25" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/activity_updates.xml" value="0.19384057971014493" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_category.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_choose_supplier.xml" value="0.196875" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_close_session.xml" value="0.18" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_motion.xml" value="0.25" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_product.xml" value="0.25" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_product_general.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_supplier.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/dialog_supplier_product.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/recycler_view_item_inventory.xml" value="0.196875" />
@@ -25,6 +31,8 @@
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/recycler_view_item_start.xml" value="0.22" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/recycler_view_item_store.xml" value="0.196875" />
         <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/recycler_view_item_supplier_category.xml" value="0.18" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/recycler_view_table_movements.xml" value="0.196875" />
+        <entry key="..\:/Users/khaf/AndroidStudioProjects/CremeriaLucy/app/src/main/res/layout/spinner_view_item_category.xml" value="0.19583333333333333" />
       </map>
     </option>
   </component>
